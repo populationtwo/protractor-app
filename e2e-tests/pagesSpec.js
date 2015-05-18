@@ -43,9 +43,8 @@ describe( "Test Pages", function () {
 		} );
 	} );
 
-
 	it( 'should search based off of the URL', function () {
-		createUrlEntry( "url one", "http://url-one.com" )
+		createUrlEntry( "url one", "http://url-one.com" );
 		createUrlEntry( "url two", "http://url-two.com" );
 		createUrlEntry( "url three", "http://url-three.com" );
 
@@ -60,12 +59,31 @@ describe( "Test Pages", function () {
 	} );
 
 	it( 'should remove URL if delete is clicked', function () {
-		createUrlEntry( "url four", "http://url-four.com" )
+		createUrlEntry( "url four", "http://url-four.com" );
 
 		return element( by.css( 'button.btn.btn-danger' ) ).click();
 
 		browser.get( ROOT + "/" );
 		expect( element.all( by.css( '.url-listing' ) ).count() ).toBe( 0 );
+	} );
+
+
+	it( 'should edit URL if edit is clicked', function () {
+		var customTitle = 'url five';
+		var customUrl = 'http://url-five.com';
+		var newCustomTitle = 'url six';
+
+		createUrlEntry( customTitle, customUrl ).then( function () {
+			element( by.css( 'a.btn.btn-primary' ) ).click();
+
+			browser.getLocationAbsUrl().then( function (url) {
+				expect( url ).toMatch( /#\/edit/ );
+				element( by.model( 'formCtrl.form.title' ) ).clear().sendKeys( newCustomTitle );
+				return element( by.css( 'input[type=submit]' ) ).click();
+			} );
+
+			expect( element( by.css( '.url-listing .listing-title' ) ).getText() ).toContain( newCustomTitle );
+		} );
 
 	} );
 } );
