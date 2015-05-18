@@ -8,14 +8,14 @@ gulp.task('install', function() {
   gulp.src('api/install.js')
     .pipe(shell([
       'node api/install.js'
-    ])); 
+    ]));
 });
 
 gulp.task('install:test', function() {
   gulp.src('api/install.js')
     .pipe(shell([
-      'NODE_ENV=TEST node api/install.js'
-    ])); 
+      'SET NODE_ENV=TEST node api/install.js'
+    ]));
 });
 
 function expressServer(port, env) {
@@ -28,7 +28,7 @@ function expressServer(port, env) {
     env: {
       'NODE_ENV': env,
       'PORT': port
-    }, 
+    },
     nodeArgs: [env == 'DEVELOPMENT' ? '--debug=9999' : '--debug=9898']
   });
 };
@@ -51,7 +51,7 @@ function runProtractor(debug) {
         .pipe(protractor({
             configFile: "protractor.js",
             args: args
-        })) 
+        }))
         .on('error', function(e) { throw e })
   }
 }
